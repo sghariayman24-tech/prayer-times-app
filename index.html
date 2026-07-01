@@ -113,30 +113,8 @@
       <!--//CITY NAME + DATE-->
     </div>
   </body>
-  <script src="./node_modules/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
-    const today = new Date();
-
-    const day = String(today.getDate()).padStart(2, "0");
-    const monthNames = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-
-    const month = monthNames[today.getMonth()];
-    const year = today.getFullYear();
-
-    const formattedDate = `${day}-${month}-${year}`;
     let cities = [
       // Maghreb
       { name: "Tunisie", country: "TN", city: "Tunis" },
@@ -173,7 +151,7 @@
         city: cityName,
       };
       axios
-        .get(`https://api.aladhan.com/v1/timingsByCity/${formattedDate}`, {
+        .get("https://api.aladhan.com/v1/timingsByCity", {
           params: params,
         })
         .then((response) => {
