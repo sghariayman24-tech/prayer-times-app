@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Stack+Sans+Headline:wght@200..700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div style="margin-top: 70px">
+      <!--CITY NAME + DATE-->
+      <div>
+        <!--CITY NAME-->
+        <div style="color: white; margin-left: 40px">
+          <h1 id="cityName">Tunisie</h1>
+          <h6 style="font-size: 40px" id="date">vendredi 29 juin</h6>
+        </div>
+        <!--CITY NAME-->
+        <!--SELECT DIV-->
+        <div class="list">
+          <select
+            name=""
+            id="cities-select"
+            style="
+              width: 250px;
+              height: 35px;
+              font-size: 20px;
+              font-family:
+                Stack Sans Headline,
+                sans-serif;
+              background: none;
+              color: white;
+              border-radius: 20px;
+            "
+          ></select>
+          <!-- // SELECT DIV-->
+        </div>
+        <hr style="margin: 0px 50px; border-color: #5200e1" />
+        <!-- PRAYER TIMINGS-->
+        <div
+          class="center"
+          style="height: 200px; margin-top: 40px; justify-content: space-around"
+        >
+          <!--CARD-->
+          <div class="card">
+            <div class="header">
+              <center><h1>Fajr</h1></center>
+            </div>
+            <div class="body center" style="height: 80%">
+              <h1 class="time" id="fajr-time">4:30</h1>
+            </div>
+          </div>
+          <!--//CARD-->
+          <!--CARD-->
+          <div class="card">
+            <div class="header">
+              <center><h1>Sobh</h1></center>
+            </div>
+            <div class="body center" style="height: 80%">
+              <h1 class="time" id="sobh-time">4:30</h1>
+            </div>
+          </div>
+          <!--//CARD-->
+          <!--CARD-->
+          <div class="card">
+            <div class="header">
+              <center><h1>Dhohr</h1></center>
+            </div>
+            <div class="body center" style="height: 80%">
+              <h1 class="time" id="dohr-time">4:30</h1>
+            </div>
+          </div>
+          <!--//CARD-->
+          <!--CARD-->
+          <div class="card">
+            <div class="header">
+              <center><h1>Asr</h1></center>
+            </div>
+            <div class="body center" style="height: 80%">
+              <h1 class="time" id="asr-time">4:30</h1>
+            </div>
+          </div>
+          <!--//CARD-->
+          <!--CARD-->
+          <div class="card">
+            <div class="header">
+              <center><h1>Maghrib</h1></center>
+            </div>
+            <div class="body center" style="height: 80%">
+              <h1 class="time" id="maghrib-time">4:30</h1>
+            </div>
+          </div>
+          <!--//CARD-->
+          <!--CARD-->
+          <div class="card">
+            <div class="header">
+              <center><h1>icha</h1></center>
+            </div>
+            <div class="body center" style="height: 80%">
+              <h1 class="time" id="icha-time">4:30</h1>
+            </div>
+          </div>
+          <!--//CARD-->
+        </div>
+        <!-- // PRAYER TIMINGS-->
+      </div>
+      <!--//CITY NAME + DATE-->
+    </div>
+  </body>
+  <script src="./node_modules/axios/dist/axios.min.js"></script>
+  <script>
+    const today = new Date();
+
+    const day = String(today.getDate()).padStart(2, "0");
+    const monthNames = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+
+    const month = monthNames[today.getMonth()];
+    const year = today.getFullYear();
+
+    const formattedDate = `${day}-${month}-${year}`;
+    let cities = [
+      // Maghreb
+      { name: "Tunisie", country: "TN", city: "Tunis" },
+      { name: "Algérie", country: "DZ", city: "Algiers" },
+      { name: "Maroc", country: "MA", city: "Rabat" },
+      { name: "Libye", country: "LY", city: "Tripoli" },
+      { name: "Mauritanie", country: "MR", city: "Nouakchott" },
+
+      // Pays du Golfe
+      { name: "Arabie Saoudite", country: "SA", city: "Riyadh" },
+      { name: "Émirats arabes unis", country: "AE", city: "Abu Dhabi" },
+      { name: "Qatar", country: "QA", city: "Doha" },
+      { name: "Koweït", country: "KW", city: "Kuwait City" },
+      { name: "Bahreïn", country: "BH", city: "Manama" },
+      { name: "Oman", country: "OM", city: "Muscat" },
+    ];
+    for (let city of cities) {
+      const content = `
+        <option style="color: black" value=${city.country}>${city.name}</option>
+        `;
+      document.getElementById("cities-select").innerHTML += content;
+    }
+    document
+      .getElementById("cities-select")
+      .addEventListener("change", function () {
+        const country = this.value;
+        const selectedCity = cities.find((c) => c.country == country);
+        getPrayersTimingsOfCity(selectedCity.country, selectedCity.city);
+        document.getElementById("cityName").innerHTML = selectedCity.name;
+      });
+    function getPrayersTimingsOfCity(country, cityName) {
+      let params = {
+        country: country,
+        city: cityName,
+      };
+      axios
+        .get(`https://api.aladhan.com/v1/timingsByCity/${formattedDate}`, {
+          params: params,
+        })
+        .then((response) => {
+          const timings = response.data.data.timings;
+          document.getElementById("fajr-time").innerHTML = timings.Fajr;
+          document.getElementById("sobh-time").innerHTML = timings.Sunrise;
+          document.getElementById("dohr-time").innerHTML = timings.Dhuhr;
+          document.getElementById("asr-time").innerHTML = timings.Asr;
+          document.getElementById("maghrib-time").innerHTML = timings.Maghrib;
+          document.getElementById("icha-time").innerHTML = timings.Isha;
+
+          const readable = response.data.data.date.readable;
+          const weekday = response.data.data.date.hijri.weekday.ar;
+          const element = readable + " " + weekday;
+          document.getElementById("date").innerHTML = element;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+    getPrayersTimingsOfCity("TN", "Tunis");
+  </script>
+</html>
